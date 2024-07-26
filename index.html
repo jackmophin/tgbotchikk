@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Numbers</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .numbers {
+            font-family: 'Andale Mono', monospace;
+            font-size: 3em;
+        }
+        .btn-play {
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 10px 20px;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+        .btn-play:disabled {
+            background-color: grey;
+            cursor: not-allowed;
+        }
+        .jackpot {
+            font-size: 2em;
+            font-family: Arial, sans-serif;
+            color: black;
+            margin-top: 20px;
+            display: none;
+        }
+        .jackpot-bg {
+            background: linear-gradient(to right, red, yellow);
+        }
+    </style>
+</head>
+<body>
+    <div class="numbers" id="numbers">000</div>
+    <button class="btn-play" id="playButton" onclick="startRandomizing()">ИГРАТЬ</button>
+    <div class="jackpot" id="jackpot">ДЖЕКПОТ!!!</div>
+
+    <script>
+        function randomizeNumbers() {
+            const numbersDiv = document.getElementById('numbers');
+            const jackpotDiv = document.getElementById('jackpot');
+            const playButton = document.getElementById('playButton');
+            let numbers = '';
+
+            for (let i = 0; i < 3; i++) {
+                numbers += Math.floor(Math.random() * 10);
+            }
+
+            numbersDiv.textContent = numbers;
+
+            if (numbers === '777') {
+                document.body.classList.add('jackpot-bg');
+                jackpotDiv.style.display = 'block';
+                playButton.disabled = true; // Отключаем кнопку
+                clearInterval(intervalId); // Останавливаем интервал
+            } else {
+                document.body.classList.remove('jackpot-bg');
+                jackpotDiv.style.display = 'none';
+            }
+        }
+
+        let intervalId;
+        function startRandomizing() {
+            const playButton = document.getElementById('playButton');
+            playButton.disabled = true; // Отключаем кнопку сразу после нажатия
+            let count = 0;
+
+            intervalId = setInterval(() => {
+                if (count < 45) {
+                    randomizeNumbers();
+                    count++;
+                } else {
+                    clearInterval(intervalId);
+                    playButton.disabled = false; 
+                }
+            }, 3);
+        }
+    </script>
+</body>
+</html>
